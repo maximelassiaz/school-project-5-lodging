@@ -5,9 +5,6 @@
     $parameters = [];
     $errors = [];
 
-    $query[] = "gite_maintenance = :gite_maintenance";
-    $parameters[] = [":gite_maintenance", 1, PDO::PARAM_INT];
-
     $gite_available = empty($_GET['available']) ? false : "Yes";
 
     if (isset($_GET['query-submit'])) {
@@ -18,7 +15,7 @@
         $gite_city = sanitize_input($_GET['city']);
         $gite_postal = sanitize_input($_GET['postal']);
         $gite_price = sanitize_input($_GET['price']);
-        $gite_bedroom = sanitize_input($_GET['bedroom']);
+        $gite_bed = sanitize_input($_GET['bed']);
         $gite_bathroom = sanitize_input($_GET['bathroom']);
         $gite_garden = empty($_GET['garden']) ? false : "Yes";
         $gite_pool = empty($_GET['pool']) ? false : "Yes";        
@@ -91,13 +88,13 @@
             }           
         }
 
-        if (!empty($gite_bedroom)) {
-            $gite_bedroom = (int)$gite_bedroom;
-            if (!is_int($gite_bedroom) && $gite_bedroom >= 0) {
+        if (!empty($gite_bed)) {
+            $gite_bed = (int)$gite_bed;
+            if (!is_int($gite_bed) && $gite_bed >= 0) {
                 $errors[] = "Le champ \"Nombre de chambres\" doit contenir uniquement des valeurs entières positives";
             } else {
-                $query[] = "gite_bedroom <= :gite_bedroom";
-                $parameters[] = [":gite_bedroom", $gite_bedroom, PDO::PARAM_INT];
+                $query[] = "gite_bed <= :gite_bed";
+                $parameters[] = [":gite_bed", $gite_bed, PDO::PARAM_INT];
             }           
         }
 

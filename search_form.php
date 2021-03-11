@@ -46,8 +46,8 @@
         <input type="range" min="<?= floor(htmlspecialchars($res['gite_price_min']));?>" max="<?= ceil(htmlspecialchars($res['gite_price_max']));?>" step="1" class="form-control-range" id="gite-price" name="price" value="<?= ceil(htmlspecialchars($res['gite_price_max']));?>">
     </div>
     <div class="form-group">
-        <label for="gite-bedroom">Nombre de chambres</label>
-        <input type="range" min="<?= htmlspecialchars($res['gite_bedroom_min']);?>" max="<?= htmlspecialchars($res['gite_bedroom_max']);?>" step="1" class="form-control-range" id="gite-bedroom" name="bedroom" value="<?= htmlspecialchars($res['gite_bedroom_max']);?>">
+        <label for="gite-bed">Nombre de chambres</label>
+        <input type="range" min="<?= htmlspecialchars($res['gite_bed_min']);?>" max="<?= htmlspecialchars($res['gite_bed_max']);?>" step="1" class="form-control-range" id="gite-bed" name="bed" value="<?= htmlspecialchars($res['gite_bed_max']);?>">
     </div>
     <div class="form-group">
         <label for="gite-bathroom">Nombre de salles de bains</label>

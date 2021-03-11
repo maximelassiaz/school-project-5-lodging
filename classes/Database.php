@@ -1,7 +1,7 @@
 <?php
 
     class Database {
-        private $dbName = "gite";
+        private $dbName = "lodging";
         private $dbHost = "localhost";
         private $dbUsername = "root";
         private $dbPwd = "";
@@ -27,7 +27,7 @@
         public function getLodgingList($query = [], $parameters = null) {
             try {
                 $sql = "SELECT * FROM gite 
-                        INNER JOIN category_gite ON gite.id_category_gite = category_gite.category_gite_id";  
+                        INNER JOIN category_gite ON gite.id_gite_category_gite = category_gite.category_gite_id";  
                 $sql = empty($query) ? $sql : "$sql WHERE " . implode(" AND ", $query);
                 $stmt = $this->conn->prepare($sql);  
                 if ($parameters) {
@@ -53,7 +53,7 @@
             try {
                 $query = str_replace("*", "gite_id", $query);
                 $sql = "SELECT * FROM gite 
-                        INNER JOIN category_gite ON gite.id_category_gite = category_gite.category_gite_id
+                        INNER JOIN category_gite ON gite.id_gite_category_gite = category_gite.category_gite_id
                         WHERE gite_id NOT IN ($query)";
                 $stmt = $this->conn->prepare($sql);  
                 if ($parameters) {
@@ -79,13 +79,13 @@
             try {
                 $sql = "SELECT  MAX(gite_price) AS gite_price_max, 
                                 MIN(gite_price) AS gite_price_min, 
-                                MAX(gite_bedroom) AS gite_bedroom_max, 
-                                MIN(gite_bedroom) AS gite_bedroom_min, 
+                                MAX(gite_bed) AS gite_bed_max, 
+                                MIN(gite_bed) AS gite_bed_min, 
                                 MAX(gite_bathroom) AS gite_bathroom_max, 
                                 MIN(gite_bathroom) AS gite_bathroom_min
                         FROM gite  
-                        INNER JOIN category_gite ON gite.id_category_gite = category_gite.category_gite_id 
-                        LEFT JOIN booking ON gite.gite_id = booking.id_gite";              
+                        INNER JOIN category_gite ON gite.id_gite_category_gite = category_gite.category_gite_id 
+                        LEFT JOIN booking ON gite.gite_id = booking.id_booking_gite";              
                 $stmt = $this->conn->prepare($sql);               
                 $stmt->execute();
                 $rows = $stmt->fetch();
@@ -100,7 +100,7 @@
             try {
                 $sql = "SELECT category_gite_name
                         FROM gite  
-                        INNER JOIN category_gite ON gite.id_category_gite = category_gite.category_gite_id";              
+                        INNER JOIN category_gite ON gite.id_gite_category_gite = category_gite.category_gite_id";              
                 $stmt = $this->conn->prepare($sql);               
                 $stmt->execute();
                 $rows = $stmt->fetchAll();

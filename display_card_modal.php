@@ -42,9 +42,6 @@ Détails
                             </p>
                             <p class="card-text">
                                 <strong>Disponibilité : </strong>                                    
-                                <?php
-                                    isAvailable($row['gite_maintenance']);
-                                ?>
                             </p>
                             <p class="card-text">
                                 <strong>Prix d'une nuitée :</strong>
@@ -53,7 +50,7 @@ Détails
                             
                             <p class="card-text">
                                 <strong>Nombre de chambres :</strong>
-                                <?= htmlspecialchars($row['gite_bedroom']) ;?>
+                                <?= htmlspecialchars($row['gite_bed']) ;?>
                             </p>
                             <p class="card-text">
                                 <strong>Nombre de salles de bain :</strong>

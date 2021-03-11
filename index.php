@@ -1,5 +1,5 @@
 <?php
-    require_once "public/partials/header.php";
+    ob_start();
     // TODO change object wether admin or client is connected
     require_once "search_form.php";
     require_once "classes/Database.php";
@@ -37,7 +37,7 @@
         </p>
         <p class="card-text">
             <strong>Nombre de chambres : </strong>
-            <?= htmlspecialchars($row['gite_bedroom']) ?>
+            <?= htmlspecialchars($row['gite_bed']) ?>
         </p>
         <?php
             require "display_card_modal.php";
@@ -68,7 +68,7 @@
                     </p>
                     <p class="card-text">
                         <strong>Nombre de chambres : </strong>
-                        <?= htmlspecialchars($row['gite_bedroom']) ?>
+                        <?= htmlspecialchars($row['gite_bed']) ?>
                     </p>
                     <?php
                         require "display_card_modal.php";
@@ -78,5 +78,6 @@
             <?php 
             }
         }   
-    require_once "public/partials/footer.php";
+    $content = ob_get_clean();
+    require "template.php";
 ?>

@@ -1,4 +1,5 @@
 <?php
+    session_start();
     if(!isset($_GET['id']) || (int)$_GET['id'] < 0 || !is_int((int)$_GET['id']) || !is_numeric($_GET['id'])) {
         header("Location: index.php");
         exit();
@@ -94,6 +95,7 @@
                     </div>
                     <?php
                         } else {
+                            echo $_SESSION['admin-email'];
                     ?>
                     <p class="text-center">Sign in or sign up to make a reservation</p>
                     <?php

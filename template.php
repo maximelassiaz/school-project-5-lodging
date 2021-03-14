@@ -1,6 +1,3 @@
-<?php
-    session_start();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +12,7 @@
     <?php // TODO : change button wether admin/client is connected or not ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5 border-bottom">
         <a class="navbar-brand" href="#">Darkbnb</a>
+        <a class="navbar-brand" href="#"><?= $_SESSION['admin-email'] ?? "" ;?></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -51,7 +49,7 @@
                     <!-- Modal login form -->
                     <div class="modal fade" id="signinModal" tabindex="-1" aria-labelledby="signinModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                            <div class="modal-content">
+                            <div class="modal-content bg-dark text-white">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="signinModalLabel">Log In</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -68,7 +66,7 @@
                                             <label for="login-password">Password</label>
                                             <input type="password" class="form-control" id="login-password" name="login-password">
                                         </div>
-                                        <button type="submit" class="btn btn-primary" name="login-submit">Log In</button>
+                                        <button type="submit" class="btn btn-info" name="login-submit">Log In !</button>
                                     </form>
                                 </div>
                             </div>
@@ -83,8 +81,8 @@
 
                     <!-- Modal login form -->
                     <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
+                        <div class="modal-dialog bg-dark">
+                            <div class="modal-content bg-dark text-white">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="signupModalLabel">Sign up</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -92,44 +90,44 @@
                                     </button>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <form method="POST" action="">
+                                    <form method="POST" action="signup.php">
                                         <div class="form-group">
                                             <label for="signup-fname">First name</label>
-                                            <input type="text" class="form-control" id="signup-fname" name="signup-fname">
+                                            <input type="text" class="form-control" id="signup-fname" name="signup-fname" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-lname">Last name</label>
-                                            <input type="text" class="form-control" id="signup-lname" name="signup-lname">
+                                            <input type="text" class="form-control" id="signup-lname" name="signup-lname" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-email">Email address</label>
-                                            <input type="email" class="form-control" id="signup-email" placeholder="Email" name="signup-email">
+                                            <input type="email" class="form-control" id="signup-email" placeholder="Email" name="signup-email" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-password">Password</label>
-                                            <input type="password" class="form-control" id="signup-password" name="signup-password">
+                                            <input type="password" class="form-control" id="signup-password" name="signup-password" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-password2">Repeat password</label>
-                                            <input type="password" class="form-control" id="signup-password2" name="signup-password2">
+                                            <input type="password" class="form-control" id="signup-password2" name="signup-password2" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-street">Street address</label>
-                                            <input type="text" class="form-control" id="signup-street" name="signup-street">
+                                            <input type="text" class="form-control" id="signup-street" name="signup-street" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-city">City</label>
-                                            <input type="text" class="form-control" id="signup-city" name="signup-city">
+                                            <input type="text" class="form-control" id="signup-city" name="signup-city" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-postal">Postal code</label>
-                                            <input type="number" class="form-control" id="signup-postal" name="signup-postal">
+                                            <input type="number" class="form-control" id="signup-postal" name="signup-postal" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="signup-country">Country</label>
-                                            <input type="text" class="form-control" id="signup-country" name="signup-country">
+                                            <input type="text" class="form-control" id="signup-country" name="signup-country" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary" name="signup-submit">Sign up</button>
+                                        <button type="submit" class="btn btn-info" name="signup-submit">Sign up !</button>
                                     </form>
                                 </div>
                             </div>
@@ -141,7 +139,7 @@
                     if (!empty($_SESSION)) {
                 ?>
                 <li class="nav-item mx-auto">
-                    <a class="btn btn-primary" href="logout.php" role="button">Log out</a>
+                    <a class="btn btn-danger m-2" href="logout.php" role="button">Log out</a>
                 </li>
                 <?php
                     }

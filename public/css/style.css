@@ -13,5 +13,14 @@ body {
 }
 
 .card img:hover {
-    filter: grayscale(70%);
+    filter: grayscale(80%);
+}
+
+.card-NA {
+    filter: invert(100%) blur(3px);
+    transition: all 750ms ease-in-out 1s;
+}
+
+.card-NA:hover {
+    filter:invert(0) blur(0);
 }

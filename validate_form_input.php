@@ -50,7 +50,7 @@
         }
 
         if (!empty($gite_type)) {
-            if (preg_match("/[^a-zA-Z]/", $gite_name)) {
+            if (preg_match("/[^a-zA-Z]/", $gite_type)) {
                 $errors[] = "Le champ \"Type de logement\" ne doit contenir que des caractères alphabétiques";
             } else {
                 $query[] = "category_gite_name = :gite_type";
@@ -59,7 +59,7 @@
         }
 
         if (!empty($gite_city)) {
-            if (preg_match("/[^a-zA-Z'-]/", $gite_name)) {
+            if (preg_match("/[^a-zA-Z'-]/", $gite_city)) {
                 $errors[] = "Le champ \"Ville\" ne doit contenir que des caractères alphanumériques, des tirets et des apostrophes";
             } else {
                 $query[] = "gite_city LIKE :gite_city";

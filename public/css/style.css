@@ -1,0 +1,10 @@
+/* media query for mobile */
+
+.card img {
+    filter: grayscale(100%);
+    transition: all 750ms ease-in-out .5s;
+}
+
+.card img:hover {
+    filter: grayscale(70%);
+}

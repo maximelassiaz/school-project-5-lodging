@@ -1,11 +1,11 @@
 <?php
     function isAvailable($data) {
         if ((int)$data === 0) {
-            echo "Oui";
+            echo "Yes";
         } elseif ((int)$data === 1) {
-            echo "Non";
+            echo "No";
         } else {
-            echo "Donnée invalide";
+            echo "Invalid data";
         }
     }
 

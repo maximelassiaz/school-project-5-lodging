@@ -7,7 +7,7 @@
     // TODO : put default value if isset (from previous query) ?
 ?>
 
-<button class="btn btn-secondary ml-5 mt-2 mb-5" type="button" data-toggle="collapse" data-target="#collapseForm" aria-expanded="false" aria-controls="collapseForm">
+<button class="btn btn-secondary ml-5 m-5" type="button" data-toggle="collapse" data-target="#collapseForm" aria-expanded="false" aria-controls="collapseForm">
     Show filter form
 </button>
 
@@ -47,20 +47,24 @@
                 <label for="gite-postal">Postal code</label>
                 <input type="text" class="form-control" id="gite-postal" name="postal">
             </div>
-            <div class="form-group col-md-10 mx-auto">
-                <label for="gite-price">Price per night</label>
+            <div class="form-group col-md-6">
+                <label for="gite-price">Price / night</label>
                 <input type="range" min="<?= floor(htmlspecialchars($res['gite_price_min']));?>" max="<?= ceil(htmlspecialchars($res['gite_price_max']));?>" step="1" class="form-control-range" id="gite-price" name="price" value="<?= ceil(htmlspecialchars($res['gite_price_max']));?>">
-            </div>
-            <div class="form-group col-md-10 mx-auto">
-                <label for="gite-bed">Nombre de chambres</label>
+            </div> 
+            <div class="form-group col-md-6">
+                <label for="gite-guest">Guest(s)</label>
+                <input type="range" min="<?= htmlspecialchars($res['gite_guest_min']);?>" max="<?= htmlspecialchars($res['gite_guest_max']);?>" step="1" class="form-control-range" id="gite-guest" name="guest" value="<?= htmlspecialchars($res['gite_guest_max']);?>">
+            </div> 
+            <div class="form-group col-md-6">
+                <label for="gite-bed">Bed(s)</label>
                 <input type="range" min="<?= htmlspecialchars($res['gite_bed_min']);?>" max="<?= htmlspecialchars($res['gite_bed_max']);?>" step="1" class="form-control-range" id="gite-bed" name="bed" value="<?= htmlspecialchars($res['gite_bed_max']);?>">
             </div>
-            <div class="form-group col-md-10 mx-auto">
-                <label for="gite-bathroom">Nombre de salles de bains</label>
+           <div class="form-group col-md-6">
+                <label for="gite-bathroom">Bathroom(s)</label>
                 <input type="range" min="<?= htmlspecialchars($res['gite_bathroom_min']) ;?>" max="<?= htmlspecialchars($res['gite_bathroom_max']);?>" step="1" class="form-control-range" id="gite-bathroom" name="bathroom" value="<?= htmlspecialchars($res['gite_bathroom_max']);?>">
-            </div>
+            </div> 
             <div class="form-group form-check col-md-3">
-                <input type="checkbox" class="form-check-input" id="gite-wifi" name="kitchen">
+                <input type="checkbox" class="form-check-input" id="gite-wifi" name="wifi">
                 <label class="form-check-label" for="gite-wifi">Wifi</label>
             </div>
             <div class="form-group form-check col-md-3">
@@ -80,27 +84,9 @@
                 <label class="form-check-label" for="gite-available">Show non available</label>
             </div>
             <div class="col-md-12 mx-auto text-center">
-                <button type="submit" class="btn btn-primary" name="query-submit">Rechercher</button>
+                <button type="submit" class="btn btn-primary" name="query-submit">Filter</button>
                 <a class="btn btn-primary" href="<?= htmlspecialchars($_SERVER['PHP_SELF']);?>" role="button">Reset</a>
             </div>        
         </div>
     </form>
 </div>
-
-<?php
-    require_once "functions.php";
-    require_once "validate_form_input.php";
-
-    // TODO : print errors array
-    if (count($errors) > 0) { ?>
-        <div class="bg-danger">
-    <?php
-        foreach ($errors as $err) {
-            echo "$err <br>";
-        }
-    ?>
-        </div>
-<?php
-    }
-    
-?>

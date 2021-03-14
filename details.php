@@ -12,7 +12,7 @@
     <div class="card bg-dark text-white m-5">
         <div class="row no-gutters">
             <div class="col-md-6">
-                <img src="public/images/<?= htmlspecialchars($row['gite_image']) ;?>" class="card-img-top sticky-top" alt="...">
+                <img src="public/images-property/<?= htmlspecialchars($row['gite_image']) ;?>" class="card-img-top sticky-top" alt="...">
             </div>
             <div class="col-md-6">
                 <div class="card-body">

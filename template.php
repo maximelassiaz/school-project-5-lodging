@@ -13,7 +13,7 @@
 </head>
 <body>
     <?php // TODO : change button wether admin/client is connected or not ?>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5 border-bottom">
         <a class="navbar-brand" href="#">Darkbnb</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -149,6 +149,8 @@
             </ul>
         </div>
     </nav>
+
+    <div class="parallax-wrapper"></div>
 
     <?= $content ?>
 

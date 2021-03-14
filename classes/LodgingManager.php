@@ -1,14 +1,14 @@
 <?php
 
     require_once "Lodging.php";
+    require_once "functions.php";
 
     class LodgingManager extends Lodging {
 
         // create a new property
         public function addLodging() {
             if(isset($_POST['create-submit'])) {
-
-                require_once "functions.php";
+                
                 $name = sanitize_input($_POST['create-name']);
                 $description = sanitize_input($_POST['create-description']);
                 $type = (int)sanitize_input($_POST['create-type']);
@@ -22,20 +22,6 @@
                 $bed = (int)sanitize_input($_POST['create-bed']);
                 $bathroom = (int)sanitize_input($_POST['create-bathroom']);
                 $wifi = isset($_POST['create-wifi']) ? "Yes" : "No";
-
-
-                // var_dump($name);
-                // var_dump($description);
-                // var_dump($type);
-                // var_dump($street);
-                // var_dump($postal);
-                // var_dump($city);
-                // var_dump($country);
-                // var_dump($price);
-                // var_dump($guest);
-                // var_dump($bed);
-                // var_dump($bathroom);
-                // var_dump($wifi);
 
                 $parameters = [];
                 $errorsCreate = [];

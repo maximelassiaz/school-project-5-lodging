@@ -1,3 +1,10 @@
+
+body {
+    background-image: url("../media/images/darkforestparallax.jpeg");
+    background-attachment: fixed;
+    
+}
+
 /* media query for mobile */
 
 .card img {

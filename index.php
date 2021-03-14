@@ -4,16 +4,17 @@
     require_once "classes/Lodging.php";
     $lodging = new Lodging();
     // Available lodging
-    $rows = $lodging->getLodgingList($query, $parameters)['rows'];
-    $count = $lodging->getLodgingList($query, $parameters)['count'];
-    $sql = $lodging->getLodgingList($query, $parameters)['sql'];
+    $rows = $lodging->getLodgingList()['rows'];
+    $count = $lodging->getLodgingList()['count'];
+    $sql = $lodging->getLodgingList()['sql'];
+    $parameters = $lodging->getLodgingList()['parameters'];
 
     // Non available lodging
     $rowsNA = $lodging->getLodgingListNonAvailable($sql, $parameters)['rows'];
     $countNA = $lodging->getLodgingListNonAvailable($sql, $parameters)['count'];    
 ?>
 
-<p class="text-center text-white m-5"><?= htmlspecialchars($count) ;?> result(s)<?= $countNA > 0 ? ",htmlspecialchars($countNA) results non available" : "" ;?></p>
+<p class="text-center text-white m-5"><?= htmlspecialchars($count) ;?> result(s) available<?= $countNA > 0 && isset($_GET['available']) ? ", <br>" . htmlspecialchars($countNA) . " results non available" : "" ;?></p>
 
 <div class="row row-cols-1 row-cols-md-2 mx-5">
   
@@ -24,7 +25,7 @@
         <div class="card mb-3 bg-dark text-white">
             <div class="row no-gutters">
                 <div class="col-md-6">
-                    <img src="public/images/<?= htmlspecialchars($row['gite_image']) ;?>" class="card-img-top sticky-top" alt="...">
+                    <img src="public/images-property/<?= htmlspecialchars($row['gite_image']) ;?>" class="card-img-top sticky-top" alt="...">
                 </div>
                 <div class="col-md-6 d-flex flex-column">
                     <div class="card-body">

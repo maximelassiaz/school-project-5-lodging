@@ -1,9 +1,9 @@
 <?php
-    session_start();
     if(!isset($_GET['id']) || (int)$_GET['id'] < 0 || !is_int((int)$_GET['id']) || !is_numeric($_GET['id'])) {
         header("Location: index.php");
         exit();
-    } else {    
+    } else {  
+    session_start();  
     ob_start();
     require_once "classes/Lodging.php";
     $lodging = new Lodging();
@@ -84,8 +84,21 @@
                                     <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <?php // TODO : booking form and class ?>
+                                <div class="modal-body">    
+                                    <form method="POST" action="reserve.php">
+                                        <div class="form-group col-md-12">
+                                            <label for="booking_date_arrival">Check in</label>
+                                            <input type="date" class="form-control" id="booking_date_arrival" name="booking_date_arrival">
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                            <label for="booking_date_departure">Check out</label>
+                                            <input type="date" class="form-control" id="booking_date_departure" name="booking_date_departure">
+                                        </div>
+                                        <input type="hidden" name="booking_gite_id" value="<?= htmlspecialchars($row['gite_id']) ;?>">
+                                        <input type="hidden" name="booking_client_id" value="<?= htmlspecialchars($_SESSION['client-id']) ;?>">
+                                        <?php // TODO : add bed / guests info for mail / arrival hour / departure hour ?>
+                                        <button type="booking-submit" class="btn btn-info" name="booking-submit">Reserve</button>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -95,11 +108,10 @@
                     </div>
                     <?php
                         } else {
-                            echo $_SESSION['admin-email'];
                     ?>
                     <p class="text-center">Sign in or sign up to make a reservation</p>
                     <?php
-                        }
+                        }                    
                     ?>
                 </div>
                     

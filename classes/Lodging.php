@@ -168,7 +168,7 @@
 
                 $sql = "SELECT * FROM gite 
                 INNER JOIN category_gite ON gite.id_gite_category_gite = category_gite.category_gite_id";  
-                $sql = empty($query) ? $sql : "$sql WHERE " . implode(" AND ", $query);
+                $sql = empty($query) ? $sql : "$sql WHERE " . implode(" AND ", $query) . " ORDER BY gite_name";
                 $stmt = $this->conn->prepare($sql);  
                 if ($parameters) {
                     foreach($parameters as $p) {
@@ -197,7 +197,7 @@
                 $sqlNA = "SELECT * FROM gite 
                         INNER JOIN category_gite ON gite.id_gite_category_gite = category_gite.category_gite_id
                         WHERE gite_id";
-                $sqlNA = empty($query) ? $sqlNA : $sqlNA . " NOT IN ($query)";   
+                $sqlNA = empty($query) ? $sqlNA : $sqlNA . " NOT IN ($query) ORDER BY gite_name";   
                 $stmt = $this->conn->prepare($sqlNA);       
                 if ($parameters) {
                     foreach($parameters as $p) {
@@ -243,9 +243,10 @@
         // Retrieve all lodging category from database
         public function displayGiteCategory() {
             try {
-                $sql = "SELECT category_gite_id, category_gite_name
+                $sql = "SELECT DISTINCT category_gite_id, category_gite_name
                         FROM category_gite  
-                        LEFT JOIN gite ON gite.id_gite_category_gite = category_gite.category_gite_id";              
+                        LEFT JOIN gite ON gite.id_gite_category_gite = category_gite.category_gite_id
+                        ORDER BY category_gite_name";              
                 $stmt = $this->conn->prepare($sql);               
                 $stmt->execute();
                 $rows = $stmt->fetchAll();

@@ -18,6 +18,7 @@
                 if($res['admin_password'] === $_POST['login-password']) {
                     session_start();
                     $_SESSION['admin-connected'] = true;
+                    $_SESSION['admin-id'] = $res['admin_id'];
                     $_SESSION['admin-email'] = $res['admin_email'];
                     // TODO : rewrite path
                     header('Location: index.php');
@@ -40,6 +41,7 @@
                     if(password_verify($_POST['login-password'], $res['client_password'])) {
                         session_start();
                         $_SESSION['client-connected'] = true;
+                        $_SESSION['client-id'] = $res['client_id'];
                         $_SESSION['client-email'] = $res['client_email'];
                         $_SESSION['client-fname'] = $res['client_fname'];
                         $_SESSION['client-lname'] = $res['client_lname'];

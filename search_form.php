@@ -2,7 +2,7 @@
     require_once "classes/Lodging.php";
     $search = new Lodging();
     $res = $search->searchForm();
-    $giteCategorySearch = $search->displayGiteCategorySearch();
+    $giteCategorySearch = $search->displayGiteCategory();
     // TODO : add date picker with bootstrap extension
     // TODO : put default value if isset (from previous query) ?
 ?>

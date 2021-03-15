@@ -1,29 +1,33 @@
 <?php
+    session_start();
     ob_start();
     $title = "Darkbnb dashboard";
     // TODO : Check is admin is connected via session variables, redirect if not;
     require_once "search_form.php";
     require_once "classes/LodgingManager.php";
     $dashboard = new LodgingManager();
-    $rows = $dashboard->getLodgingList($query, $parameters)['rows'];
-    $count = $dashboard->getLodgingList($query, $parameters)['count'];
-    $sql = $dashboard->getLodgingList($query, $parameters)['sql'];
+    // Available property
+    $rows = $dashboard->getLodgingList()['rows'];
+    $count = $dashboard->getLodgingList()['count'];
+    $sql = $dashboard->getLodgingList()['sql'];
+    $parameters = $dashboard->getLodgingList()['parameters'];
+
+    // Non available property
     $rowsNA = $dashboard->getLodgingListNonAvailable($sql, $parameters)['rows'];
     $countNA = $dashboard->getLodgingListNonAvailable($sql, $parameters)['count'];
     $giteCategory = $dashboard->displayGiteCategory();
 ?>
 
-<?php // TODO : Create form and modal button to add a lodging ?>
 
 <!-- Button trigger modal for creating a property -->
-<button type="button" class="btn btn-info text-white" data-toggle="modal" data-target="#createModal">
+<button type="button" class="btn btn-info text-white m-5" data-toggle="modal" data-target="#createModal">
   Add a property
 </button>
 
 <!-- Modal for creating a property -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content bg-dark text-white">
       <div class="modal-header">
         <h5 class="modal-title" id="createModalLabel">Add a property</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -31,7 +35,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="" enctype='multipart/form-data'>
+        <form method="POST" action="addProperty.php" enctype='multipart/form-data'>
             <div class="form-group">
                 <label for="create-name">Property name</label>
                 <input type="text" class="form-control" id="create-name" name="create-name" placeholder="Property name">
@@ -103,12 +107,9 @@
   </div>
 </div>
 
-<?php $dashboard->addLodging(); ?>
-          
+<p class="text-center text-white m-5"><?= htmlspecialchars($count) ;?> result(s) available<?= $countNA > 0 && isset($_GET['available']) ? ", <br>" . htmlspecialchars($countNA) . " results non available" : "" ;?></p>
 
-<p><?= htmlspecialchars($count) ;?> result(s)</p>
-<p><?= htmlspecialchars($countNA);?> result(s)</p>
-
+<!-- Property dashboard -->
 <table class="table table-dark">
     <thead>
         <tr>
@@ -116,7 +117,7 @@
             <th scope="col">Property name</th>
             <th scope="col">Property type</th>
             <th scope="col">Full address</th>
-            <th scope="col">Price per night</th>            
+            <th scope="col">Price / night</th>            
             <th scope="col" colspan="3">Management</th>
         </tr>
     </thead>
@@ -125,65 +126,139 @@
             foreach($rows as $row) {
         ?>
         <tr>
-            <th scope="row"><?= htmlspecialchars($row['gite_id']) ?></th>
-            <td><?= ucwords(htmlspecialchars($row['gite_name'])) ?></td>
-            <td><?= ucfirst(htmlspecialchars($row['category_gite_name'])) ?></td>
+            <th scope="row">
+                <?= htmlspecialchars($row['gite_id']) ?>
+            </th>
             <td>
-                <?= htmlspecialchars($row['gite_street']) ?> <br> 
-                <?= htmlspecialchars($row['gite_city']) ?> 
+                <?= mb_strtoupper(htmlspecialchars($row['gite_name']), "utf-8") ?>
+            </td>
+            <td>
+                <?= mb_strtoupper(htmlspecialchars($row['category_gite_name']), "utf-8") ?>
+            </td>
+            <td>
+                <?= mb_strtoupper(htmlspecialchars($row['gite_street']), "utf-8") ?> <br> 
+                <?= mb_strtoupper(htmlspecialchars($row['gite_city']), "utf-8") ?> 
                 <?= htmlspecialchars($row['gite_postal']) ?>
             </td>
-            <td><?= number_format(htmlspecialchars($row['gite_price']), 2, ",", " ") ?> €</td>
-            <!-- Display more details using a modal button -->
             <td>
-                <?php
-                    require "display_card_modal.php";
-                ?>
+                <?= number_format(htmlspecialchars($row['gite_price']), 2, ",", " ") ?> €
+            </td>
+            <td>
+                <a class="btn btn-info" target="_blank" href="details.php?id=<?= htmlspecialchars($row['gite_id']) ;?>" role="button">Details</a>
             </td>          
             <td>
-                <!-- Button trigger modal for update modal -->
-                <button type="button" class="btn btn-warning text-white" data-toggle="modal" data-target="#staticBackdrop">
+                <!-- Button trigger modal for updating a property -->
+                <button type="button" class="btn btn-warning text-white" data-toggle="modal" data-target="#updateModal<?= $row['gite_id'] ?>">
                     Update
                 </button>
 
-                <!-- Modal for update modal -->
-                <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </td>
-            <td>
-                <!-- Button trigger modal for delete modal -->
-                <button type="button" class="btn btn-danger text-white" data-toggle="modal" data-target="#staticBackdrop">
-                    Delete
-                </button>
-
-                <!-- Modal for delete modal -->
-                <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
+                <!-- Modal for updating a property -->
+                <div class="modal fade" id="updateModal<?= $row['gite_id'] ?>" tabindex="-1" aria-labelledby="updateModalLabel<?= $row['gite_id'] ?>" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark text-white">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                <h5 class="modal-title" id="updateModalLabel<?= $row['gite_id'] ?>">Update a property</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                ...
+                                <form method="POST" action="updateProperty.php" enctype='multipart/form-data'>
+                                    <div class="form-group">
+                                        <label for="update-name">Property name</label>
+                                        <input type="text" class="form-control" id="update-name" name="update-name" value="<?= $row['gite_name'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-description">Property description</label>
+                                        <textarea class="form-control" id="update-description" name="update-description" rows="3"><?= $row['gite_description'] ?></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-type">Property type</label>
+                                        <select class="form-control" id="update-type" name="update-type">
+                                        <option value="<?= $row['category_gite_id'] ?>"><?= strtoupper($row['category_gite_name']) ?></option>
+                                        <?php
+                                            foreach ($giteCategory as $g) {
+                                        ?>
+                                        <option value="<?= htmlspecialchars($g['category_gite_id']) ;?>"><?= strtoupper(htmlspecialchars($g['category_gite_name'])) ;?></option>
+                                        <?php
+                                            }
+                                        ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-image">Choose a property picture</label>
+                                        <input type="file" class="form-control-file" id="update-image" name="update-image">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-street">Property street</label>
+                                        <input type="text" class="form-control" id="update-street" name="update-street" value="<?= $row['gite_street'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-postal">Property postal code</label>
+                                        <input type="number" class="form-control" id="update-postal" name="update-postal" value="<?= $row['gite_postal'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-city">Property city</label>
+                                        <input type="text" class="form-control" id="update-city" name="update-city" value="<?= $row['gite_city'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-country">Property country</label>
+                                        <input type="text" class="form-control" id="update-country" name="update-country" value="<?= $row['gite_country'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-price">Price per night</label>
+                                        <input type="number" class="form-control" id="update-price" name="update-price" value="<?= $row['gite_price'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-guest">Maximum number of guests</label>
+                                        <input type="number" class="form-control" id="update-guest" name="update-guest" value="<?= $row['gite_guest'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-bed">Number of beds</label>
+                                        <input type="number" class="form-control" id="update-bed" name="update-bed" value="<?= $row['gite_bed'] ?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="update-bathroom">Number of bathroom</label>
+                                        <input type="number" class="form-control" id="update-bathroom" name="update-bathroom" value="<?= $row['gite_bathroom'] ?>">
+                                    </div>
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input" id="update-wifi" <?= (int)$row['gite_wifi'] === 1 ? "checked" : "" ?>>
+                                        <label class="form-check-label" for="update-wifi" name="update-wifi">WiFi</label>
+                                    </div>
+                                    <input type="hidden" name="update-id" value="<?= $row['gite_id'] ?>">
+                                    <button type="submit" class="btn btn-warning" name="update-submit">Update</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>        
+                <!-- Button trigger modal for delete modal -->
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal<?= $row['gite_id'] ?>">
+                    Delete
+                </button>
+
+                <!-- Modal for delete modal -->
+                <div class="modal fade" id="deleteModal<?= $row['gite_id'] ?>" tabindex="-1" aria-labelledby="deleteModalLabel<?= $row['gite_id'] ?>" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel<?= $row['gite_id'] ?>"><?= strtoupper($row['gite_name']) ?></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h6 class="text-center">Warning !</h6>
+                                <p class="text-center">Deleting a property is a permanent action.</p>
+                                <form method="POST" action="deleteProperty.php" class="text-center">
+                                    <input type="hidden" class="form-check-input" name="delete-gite-id" value="<?= $row['gite_id'] ?>">                            
+                                    <button type="submit" class="btn btn-danger mx-auto" name="delete-gite-submit">Delete</button>
+                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -13,7 +13,7 @@ body {
 }
 
 .card img:hover {
-    filter: grayscale(80%);
+    filter: grayscale(70%);
 }
 
 .card-NA {

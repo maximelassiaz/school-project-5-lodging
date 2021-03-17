@@ -22,6 +22,76 @@
     $giteCategory = $dashboard->displayGiteCategory();
 ?>
 
+<!-- Show error(s) if wrong inputs were used when trying to update lodging -->
+<?php
+    if (isset($_SESSION['update-error']) && count($_SESSION['update-error']) > 0 ) {
+        $updateErrors = $_SESSION['update-error'];
+?>
+    <div class="alert alert-warning alert-dismissible fade show mx-auto my-4 w-75" role="alert">
+    <?php 
+        foreach($updateErrors as $e) {
+            echo htmlspecialchars($e) . "<br>";
+        }
+    ?>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+<?php
+        unset($_SESSION['update-error']);   
+    }
+?>
+
+<!-- Show success or failure message for delete property -->
+<?php
+    if (isset($_GET['delete'])) {
+        $delete = $_GET['delete'];
+?>
+        <div class="alert alert-<?= $delete === "failure" ? "danger" : "success" ?> alert-dismissible fade show mx-auto my-4 w-50" role="alert">
+            <?= $delete === "failure" ? "An error occured while deleting a property, please try again or contact support." : "" ?>
+            <?= $delete === "success" ? "Property has been deleted." : "" ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+<?php       
+    }
+?>
+
+<!-- Show success or failure message for create property -->
+<?php
+    if (isset($_GET['create'])) {
+        $create = $_GET['create'];
+?>
+        <div class="alert alert-<?= $create === "success" ? "success" : "danger" ?> alert-dismissible fade show mx-auto my-4 w-50" role="alert">
+            <?= $create === "emptyfields" ? "All fields must be filled in the add property form." : "" ?>
+            <?= $create === "failure" ? "An error occured while creating a new property, please try again or contact support." : "" ?>
+            <?= $create === "success" ? "Property has been successfully created." : "" ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+<?php       
+    }
+?>
+
+<!-- Show success or failure message for updating property -->
+<?php
+    if (isset($_GET['update'])) {
+        $update = $_GET['update'];
+?>
+        <div class="alert alert-<?= $update === "failure" ? "danger" : "success" ?> alert-dismissible fade show mx-auto my-4 w-50" role="alert">
+            <?= $update === "emptyfields" ? "All fields must be filled in the update property form." : "" ?>
+            <?= $update === "failure" ? "An error occured while updating a property, please try again or contact support." : "" ?>
+            <?= $update === "success" ? "Property has been updated." : "" ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+<?php       
+    }
+?>
+
 
 <!-- Button trigger modal for creating a property -->
 <button type="button" class="btn btn-info text-white m-5" data-toggle="modal" data-target="#createModal">
@@ -42,15 +112,15 @@
         <form method="POST" action="addProperty.php" enctype='multipart/form-data'>
             <div class="form-group">
                 <label for="create-name">Property name</label>
-                <input type="text" class="form-control" id="create-name" name="create-name" placeholder="Property name">
+                <input type="text" class="form-control" id="create-name" name="create-name" placeholder="Property name" required>
             </div>
             <div class="form-group">
                 <label for="create-description">Property description</label>
-                <textarea class="form-control" id="create-description" name="create-description" rows="3" placeholder="Property description"></textarea>
+                <textarea class="form-control" id="create-description" name="create-description" rows="3" placeholder="Property description" required></textarea>
             </div>
             <div class="form-group">
                 <label for="create-type">Property type</label>
-                <select class="form-control" id="create-type" name="create-type">
+                <select class="form-control" id="create-type" name="create-type" required>
                 <option value="">Select</option>
                 <?php
                     foreach ($giteCategory as $g) {
@@ -63,44 +133,63 @@
             </div>
             <div class="form-group">
                 <label for="create-image">Choose a property picture</label>
-                <input type="file" class="form-control-file" id="create-image" name="create-image">
+                <input type="file" class="form-control-file" id="create-image" name="create-image" required>
             </div>
             <div class="form-group">
                 <label for="create-street">Property street</label>
-                <input type="text" class="form-control" id="create-street" name="create-street" placeholder="Street">
+                <input type="text" class="form-control" id="create-street" name="create-street" placeholder="Street" required>
             </div>
             <div class="form-group">
                 <label for="create-postal">Property postal code</label>
-                <input type="number" class="form-control" id="create-postal" name="create-postal" placeholder="Postal code">
+                <input type="number" class="form-control" id="create-postal" name="create-postal" placeholder="Postal code" required>
             </div>
             <div class="form-group">
                 <label for="create-city">Property city</label>
-                <input type="text" class="form-control" id="create-city" name="create-city" placeholder="City">
+                <input type="text" class="form-control" id="create-city" name="create-city" placeholder="City" required>
             </div>
             <div class="form-group">
                 <label for="create-country">Property country</label>
-                <input type="text" class="form-control" id="create-country" name="create-country" placeholder="Country">
+                <input type="text" class="form-control" id="create-country" name="create-country" placeholder="Country" required>
             </div>
             <div class="form-group">
                 <label for="create-price">Price per night</label>
-                <input type="number" class="form-control" id="create-price" name="create-price" placeholder="Price per night">
+                <input type="number" class="form-control" id="create-price" name="create-price" placeholder="Price per night" required>
             </div>
             <div class="form-group">
                 <label for="create-guest">Maximum number of guests</label>
-                <input type="number" class="form-control" id="create-guest" name="create-guest" placeholder="Maximum number of guests">
+                <input type="number" class="form-control" id="create-guest" name="create-guest" placeholder="Maximum number of guests" required>
             </div>
             <div class="form-group">
                 <label for="create-bed">Number of beds</label>
-                <input type="number" class="form-control" id="create-bed" name="create-bed" placeholder="Number of beds">
+                <input type="number" class="form-control" id="create-bed" name="create-bed" placeholder="Number of beds" required>
             </div>
             <div class="form-group">
                 <label for="create-bathroom">Number of bathroom</label>
-                <input type="number" class="form-control" id="create-bathroom" name="create-bathroom" placeholder="Number of bathroom">
+                <input type="number" class="form-control" id="create-bathroom" name="create-bathroom" placeholder="Number of bathroom" required>
             </div>
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="create-wifi">
                 <label class="form-check-label" for="create-wifi" name="create-wifi">WiFi</label>
             </div>
+            <!-- Show error(s) if wrong inputs were used when trying to create new lodging -->
+            <?php
+                if (isset($_SESSION['create-error']) && count($_SESSION['create-error']) > 0 ) {
+                    $createErrors = $_SESSION['create-error'];
+            ?>
+                <div class="alert alert-warning alert-dismissible fade show mx-auto my-4 w-75" role="alert">
+                <?php 
+                    foreach($createErrors as $e) {
+                        echo htmlspecialchars($e) . "<br>";
+                    }
+                ?>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <?php
+                    unset($_SESSION['create-error']);   
+                }
+            ?>
             <button type="submit" class="btn btn-info" name="create-submit">Add new property</button>
         </form>
       </div>

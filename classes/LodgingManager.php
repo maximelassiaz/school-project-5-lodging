@@ -30,7 +30,8 @@
                 $errorsCreate = [];
 
                 if(empty($name) || empty($description) || empty($type) || empty($street) || empty($postal) || empty($city) || empty($country) || empty($image) || empty($price) || empty($guest) || empty($bed) || empty($bathroom)) {
-                    $errorsCreate[] = "All fields must be filled";
+                    header("Location: dashboard.php?create=emptyfields");
+                    exit();
                 } else {
                     if (!is_string($name)) {
                         $errorsCreate[] = "\"Property name\" field must only contain letters, numbers, etc.";
@@ -48,7 +49,6 @@
                         $imageTmpName = $image['tmp_name'];
                         $imageSize = $image['size'];
                         $imageError = $image['error'];
-                        $imageType = $image['type'];
 
                         $imageExt = explode('.', $imageName);
                         $imageActualExt = strtolower(end($imageExt));
@@ -108,7 +108,10 @@
                     }
 
                     if (count($errorsCreate) > 0) {
-                        echo implode("<br>", $errorsCreate);
+                        session_start();
+                        $_SESSION['create-error'] = $errorsCreate;
+                        header("Location: dashboard.php?create=failure");
+                        exit();
                     } else {
                         $sql = "INSERT INTO gite (gite_name, gite_description, id_gite_category_gite, gite_image, gite_street, gite_postal,gite_city, gite_country, gite_price, gite_guest, gite_bed, gite_bathroom, gite_wifi)
                                 VALUES (:gite_name, :gite_description, :gite_type, :gite_image, :gite_street, :gite_postal, :gite_city, :gite_country, :gite_price, :gite_guest, :gite_bed, :gite_bathroom, :gite_wifi)";
@@ -136,10 +139,10 @@
                         }
 
                         if ($stmt->execute()) {
-                            header("Location: dashboard.php");
+                            header("Location: dashboard.php?create=success");
                             exit();
                         } else {
-                            header("Location: dashboard.php");
+                            header("Location: dashboard.php?create=failure");
                             exit();
                         }
                     }
@@ -148,6 +151,7 @@
         }
 
         // delete a property
+        // nww/b
         public function deleteLodging() {
 
             if(!isset($_POST['delete-gite-submit'])) {
@@ -162,15 +166,17 @@
                     $stmt->bindValue(":gite_id", $_POST['delete-gite-id'], PDO::PARAM_INT);
                     
                     if ($stmt->execute()) {
-                        echo "success";
+                        header("Location: dashboard.php?delete=success");
+                        exit();
                     } else {
-                        echo "failure";
+                        header("Location: dashboard.php?delete=success");
+                        exit();
                     }
                 } else {
-                    echo "failure isset";
-                    echo $_POST['delete-gite-id'];
+                    header("Location: dashboard.php");
+                    exit();
                 }
-            }
+            } 
         }
 
         // update a new property
@@ -197,7 +203,8 @@
                 $errorsUpdate = [];
 
                 if(empty($name) || empty($description) || empty($type) || empty($street) || empty($postal) || empty($city) || empty($country) || empty($price) || empty($guest) || empty($bed) || empty($bathroom)) {
-                    $errorsUpdate[] = "All fields must be filled";
+                    header("Location: dashboard.php?update=emptyfields");
+                    exit();
                 } else {
                     if (!is_string($name)) {
                         $errorsUpdate[] = "\"Property name\" field must only contain letters, numbers, etc.";
@@ -217,7 +224,6 @@
                         $imageTmpName = $image['tmp_name'];
                         $imageSize = $image['size'];
                         $imageError = $image['error'];
-                        $imageType = $image['type'];
 
                         $imageExt = explode('.', $imageName);
                         $imageActualExt = strtolower(end($imageExt));
@@ -278,7 +284,10 @@
                     }
 
                     if (count($errorsUpdate) > 0) {
-                        echo implode("<br>", $errorsUpdate);
+                        session_start();
+                        $_SESSION['create-update'] = $errorsUpdate;
+                        header("Location: dashboard.php?update=failure");
+                        exit();
                     } else {
                         $giteImage = empty($_FILES['update-image']['name']) ? "" : ", gite_image = :gite_image";
                         $id = $_POST['update-id'];
@@ -296,7 +305,7 @@
                                     gite_bathroom = :gite_bathroom,
                                     gite_wifi = :gite_wifi
                                     $giteImage
-                                WHERE gite_id = :gite_id";
+                                WHERE gite_id = $id";
                         $stmt = $this->conn->prepare($sql);
 
                         $parameters[] = [":gite_name", $name, PDO::PARAM_STR];
@@ -310,7 +319,6 @@
                         $parameters[] = [":gite_guest", $guest, PDO::PARAM_INT];
                         $parameters[] = [":gite_bed", $bed, PDO::PARAM_INT];
                         $parameters[] = [":gite_bathroom", $bathroom, PDO::PARAM_INT];
-                        $paramaters[] = [":gite_id", $id, PDO::PARAM_INT];
                         if ($wifi === "Yes") {
                             $parameters[] = [":gite_wifi", 1, PDO::PARAM_INT];
                         }  elseif ($wifi === "No") {
@@ -322,10 +330,10 @@
                         }
 
                         if ($stmt->execute()) {
-                            header("Location: dashboard.php");
+                            header("Location: dashboard.php?update=success");
                             exit();
                         } else {
-                            header("Location: dashboard.php");
+                            header("Location: dashboard.php?update=failure");
                             exit();
                         }
                     }

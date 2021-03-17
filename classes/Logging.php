@@ -1,5 +1,4 @@
 <?php 
-
     require_once "Database.php";
     require_once "./functions.php";
 
@@ -20,12 +19,12 @@
                     $_SESSION['admin-connected'] = true;
                     $_SESSION['admin-id'] = $res['admin_id'];
                     $_SESSION['admin-email'] = $res['admin_email'];
-                    // TODO : rewrite path
                     header('Location: index.php');
                     exit();
                 } else {
-                    // TODO : rewrite path
-                    header('Location: index.php?error=logindetails');
+                    session_start();
+                    $_SESSION['login-error'] = "Your login details are not correct, try again.";
+                    header('Location: index.php');
                     exit();
                 }
             // Check if client is trying to connect
@@ -45,21 +44,24 @@
                         $_SESSION['client-email'] = $res['client_email'];
                         $_SESSION['client-fname'] = $res['client_fname'];
                         $_SESSION['client-lname'] = $res['client_lname'];
-                        // TODO : rewrite path
                         header("Location: index.php");
                         exit();
                     } else {
-                        // TODO : rewrite path
-                        header('Location: index.php?error=logindetail');
+                        session_start();
+                        $_SESSION['login-error'] = "Your login details are not correct, try again.";
+                        header('Location: index.php');
                         exit();
                     }
                 } else {
-                    header('Location: index.php?error=logindetails');
+                    session_start();
+                    $_SESSION['login-error'] = "Your login details are not correct, try again.";
+                    header('Location: index.php');
                     exit();
                 }            
         }
     } 
 
+        // Register new client in database
         public function signUp() {
             if(isset($_POST['signup-submit'])) {
 
@@ -134,7 +136,10 @@
                     } 
 
                     if(count($errorsSignup) > 0) {
-                        // TODO : print errors
+                        session_start();
+                        $_SESSION['signup-error'] = $errorsSignup;
+                        header("Location: index.php");
+                        exit();  
                     } else {
                         $sql = "INSERT INTO client (client_fname, client_lname, client_email, client_password, client_street, client_city, client_postal, client_country)
                                 VALUES (:client_fname, :client_lname, :client_email, :client_password, :client_street, :client_city, :client_postal, :client_country)";
@@ -145,7 +150,7 @@
                             } 
                         } 
                         if ($stmt->execute()) {
-                            // TODO : do redirection properly
+                            session_start();
                             header("Location: index.php?signup=success");
                             exit();     
                         } else {

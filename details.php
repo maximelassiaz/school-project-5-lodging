@@ -11,6 +11,22 @@
     $row = $lodging->getLodging((int)$_GET['id']);
 ?>
 
+<?php
+    if (isset($_GET['booking'])) {
+        $booking = $_GET['booking'];
+?>
+        <div class="alert alert-<?= $booking === "failure" ? "danger" : "success" ?> alert-dismissible fade show mx-auto my-4 w-50" role="alert">
+            <?= $booking === "emptyfields" ? "You must fill both date fields" : "" ?>
+            <?= $booking === "success" ? "Congratulation, booking is successful, we sent you a email" : "" ?>
+            <?= $booking === "failure" ? "An error occured, please try again or contact support" : "" ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+<?php       
+    }
+?>
+
     <div class="card bg-dark text-white m-5">
         <div class="row no-gutters">
             <div class="col-md-6">
@@ -29,7 +45,6 @@
                         <?= strtoupper(htmlspecialchars($row['gite_country'])) ?>
                     </p>
                     <h6 class="card-title border-top border-white p-2 text-center">PROPERTY INFORMATIONS</h6>
-                    <?php // TODO : separate info and value ?>
                     <table class="table table-dark mt-2">
                         <tbody>
                             <tr>
@@ -101,15 +116,34 @@
                                     <form method="POST" action="reserve.php">
                                         <div class="form-group col-md-12">
                                             <label for="booking_date_arrival">Check in</label>
-                                            <input type="date" class="form-control" id="booking_date_arrival" name="booking_date_arrival">
+                                            <input type="date" class="form-control" id="booking_date_arrival" name="booking_date_arrival" required>
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label for="booking_date_departure">Check out</label>
-                                            <input type="date" class="form-control" id="booking_date_departure" name="booking_date_departure">
+                                            <input type="date" class="form-control" id="booking_date_departure" name="booking_date_departure" required>
                                         </div>
                                         <input type="hidden" name="booking_gite_id" value="<?= htmlspecialchars($row['gite_id']) ;?>">
                                         <input type="hidden" name="booking_client_id" value="<?= htmlspecialchars($_SESSION['client-id']) ;?>">
                                         <?php // TODO : add bed / guests info for mail / arrival hour / departure hour ?>
+                                        <?php
+                                            if (isset($_SESSION['booking-error']) && count($_SESSION['booking-error']) > 0 ) {
+                                                $bookingErrors = $_SESSION['booking-error'];
+                                        ?>
+                                            <div class="alert alert-warning alert-dismissible fade show mx-auto my-4 w-75" role="alert">
+                                            <?php 
+                                                foreach($bookingErrors as $e) {
+                                                    echo htmlspecialchars($e) . "<br>";
+                                                }
+                                            ?>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        <?php
+                                                unset($_SESSION['booking-error']);   
+                                            }
+                                        ?>
+                                        
                                         <button type="booking-submit" class="btn btn-info" name="booking-submit">Reserve</button>
                                     </form>
                                 </div>

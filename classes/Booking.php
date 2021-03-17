@@ -5,6 +5,8 @@
 
     class Booking extends Database {
         public function reserveProperty() {
+
+                
             
                 $errorsBooking = [];
                 $parameters = [];
@@ -15,7 +17,8 @@
                 $gite_id = (int)sanitize_input($_POST['booking_gite_id']);
 
                 if (empty($date_arrival) || empty($date_departure) || empty($client_id) || empty($gite_id)) {
-                    $errorsBooking[] = "All fields must be filled";
+                    header("Location: details.php?id=$gite_id&booking=emptyfields");
+                    exit();
                 } else {
 
                     if($date_arrival >= $date_departure) {
@@ -42,9 +45,10 @@
                     }
 
                     if (count($errorsBooking) > 0) {
-                        foreach ($errorsBooking as $e) {
-                            echo "$e" . "<br>";
-                        }
+                        session_start();
+                        $_SESSION['booking-error'] = $errorsBooking;
+                        header("Location: details.php?id=$gite_id");
+                        exit();
                     } else {
                         $sql = "INSERT INTO booking (id_booking_gite, id_booking_client, booking_date_arrival, booking_date_departure)
                                 VALUES (:id_booking_gite, :id_booking_client, :booking_date_arrival, :booking_date_departure)";
@@ -55,11 +59,10 @@
                             }
                         }
                         if ($stmt->execute()) {
-                            // TODO : success
-                            echo "success";
+                            return true;
                         } else {
-                            // TODO : failure
-                            echo "failure";
+                            header("Location: details.php?id=$gite_id&booking=failure");
+                            exit();
                         }
                     }
                 }

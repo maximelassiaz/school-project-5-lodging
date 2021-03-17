@@ -164,6 +164,7 @@
                 if (count($errorsFilter) > 0) {
                     $query = "";
                     $parameters = null;
+                    session_start();
                     $_SESSION['filter-error'] = $errorsFilter;
                 } else {
                     $query = empty($query) ? [] : $query;
@@ -258,21 +259,5 @@
             } catch (PDOException $e) {
                 die("Error : " . $e->getMessage());
             }
-        }
-
-        public function displayGiteCategorySearch() {
-            try {
-                $sql = "SELECT DISTINCT category_gite_name
-                        FROM category_gite 
-                        INNER JOIN gite ON gite.id_gite_category_gite = category_gite.category_gite_id
-                        ORDER BY category_gite_name";              
-                $stmt = $this->conn->prepare($sql);               
-                $stmt->execute();
-                $rows = $stmt->fetchAll();
-                return $rows;
-            } catch (PDOException $e) {
-                die("Error : " . $e->getMessage());
-            }
-        }
-            
+        }            
     }

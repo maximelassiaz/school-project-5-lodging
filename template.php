@@ -28,7 +28,7 @@
                 </li>
                 <?php 
                     }
-                    if (empty($_SESSION)) { 
+                    if (empty($_SESSION['admin-connected']) && empty($_SESSION['client-connected'])) { 
                 ?>
                 <li class="nav-item mx-auto">
                     <!-- Button trigger modal for login form -->
@@ -126,7 +126,7 @@
                 </li>
                 <?php 
                     }
-                    if (!empty($_SESSION)) {
+                    if (!empty($_SESSION["client-connected"]) || !empty($_SESSION['admin-connected'])) {
                 ?>
                 <li class="nav-item mx-auto">
                     <form method="POST" action="logout.php">

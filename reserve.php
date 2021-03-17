@@ -1,14 +1,22 @@
 <?php
     session_start();
     if (!isset($_POST['booking-submit'])) {
-        // TODO : do a proper redirection
         header("Location: index.php");
         exit();
     } else {
-        require "classes/Mailing.php";
-        $confirmationMail = new Mailing();
+
         require "classes/Booking.php";
+        // register booking in database
         $booking = new Booking();
-        $booking->reserveProperty();
+        if ($booking->reserveProperty()) {
+
+            $email = $_SESSION['client-email'];
+            $fname = $_SESSION['client-fname'];
+            $lname = $_SESSION['client-lname'];
+
+            // send confirmation mail
+            require "classes/Mailing.php";
+            $confirmationMail = new Mailing();
+        }             
     }
 ?>

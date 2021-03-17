@@ -1,5 +1,4 @@
 <?php
-
     require_once "Database.php";
     require_once "./functions.php";
 
@@ -153,14 +152,19 @@
                     if ($gite_kitchen === "Yes") {
                         $query[] = "category_gite_kitchen = :category_gite_kitchen";
                         $parameters[] = [":category_gite_kitchen", 1, PDO::PARAM_INT];
-                    }        
+                    }    
+                    
+                    if ($gite_wifi === "Yes") {
+                        $query[] = "gite_wifi = :gite_wifi";
+                        $parameters[] = [":gite_wifi", 1, PDO::PARAM_INT];
+                    }  
                 }
             
                 // if data is invalid, print errors and return all lodging
                 if (count($errorsFilter) > 0) {
                     $query = "";
                     $parameters = null;
-                    // TODO : print errors
+                    $_SESSION['filter-error'] = $errorsFilter;
                 } else {
                     $query = empty($query) ? [] : $query;
                     $parameters = empty($parameters) ? null : $parameters; 

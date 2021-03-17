@@ -7,7 +7,10 @@
 
         // create a new property
         public function addLodging() {
-            if(isset($_POST['create-submit'])) {
+            if(!isset($_POST['create-submit'])) {
+                header("Location: dashboard.php");
+                exit();
+            } else {
                 
                 $name = sanitize_input($_POST['create-name']);
                 $description = sanitize_input($_POST['create-description']);
@@ -147,7 +150,10 @@
         // delete a property
         public function deleteLodging() {
 
-            if(isset($_POST['delete-gite-submit'])) {
+            if(!isset($_POST['delete-gite-submit'])) {
+                header("Location: dashboard.php");
+                exit();
+            } else {
 
                 if(isset($_POST['delete-gite-id']) && (int)$_POST['delete-gite-id'] > 0) {
                     
@@ -169,7 +175,10 @@
 
         // update a new property
         public function updateLodging() {
-            if(isset($_POST['update-submit'])) {
+            if(!isset($_POST['update-submit'])) {
+                header("Location: dashboard.php");
+                exit();
+            } else {
                 
                 $name = sanitize_input($_POST['update-name']);
                 $description = sanitize_input($_POST['update-description']);
@@ -226,9 +235,7 @@
                             move_uploaded_file($imageTmpName, $imageDestination);
                             $parameters[] = [":gite_image", $imageNameNew, PDO::PARAM_STR];
                         }             
-                    }
-
-                       
+                    }                       
 
                     if (!is_string($street)) {
                         $errorsUpdate[] = "\"Property street\" field must only contain letters, numbers, etc.";
@@ -288,7 +295,8 @@
                                     gite_bed = :gite_bed, 
                                     gite_bathroom = :gite_bathroom,
                                     gite_wifi = :gite_wifi
-                                WHERE gite_id = $id";
+                                    $giteImage
+                                WHERE gite_id = :gite_id";
                         $stmt = $this->conn->prepare($sql);
 
                         $parameters[] = [":gite_name", $name, PDO::PARAM_STR];
@@ -302,7 +310,7 @@
                         $parameters[] = [":gite_guest", $guest, PDO::PARAM_INT];
                         $parameters[] = [":gite_bed", $bed, PDO::PARAM_INT];
                         $parameters[] = [":gite_bathroom", $bathroom, PDO::PARAM_INT];
-                        // $paramaters[] = [":gite_id", $_POST['update-id'], PDO::PARAM_INT];
+                        $paramaters[] = [":gite_id", $id, PDO::PARAM_INT];
                         if ($wifi === "Yes") {
                             $parameters[] = [":gite_wifi", 1, PDO::PARAM_INT];
                         }  elseif ($wifi === "No") {
@@ -314,13 +322,11 @@
                         }
 
                         if ($stmt->execute()) {
-                            echo "success";
-                            // header("Location: dashboard.php");
-                            // exit();
+                            header("Location: dashboard.php");
+                            exit();
                         } else {
-                            echo "failure";
-                            // header("Location: dashboard.php");
-                            // exit();
+                            header("Location: dashboard.php");
+                            exit();
                         }
                     }
                 }

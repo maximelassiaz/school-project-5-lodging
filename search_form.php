@@ -29,7 +29,7 @@
             <div class="form-group col-md-6">
                 <label for="gite-type">Property type</label>
                 <select class="form-control" id="gite-type" name="type">
-                    <option value=""></option>
+                    <option value="">Select</option>
                     <?php
                         foreach ($giteCategorySearch as $g) {
                     ?>

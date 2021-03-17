@@ -1,26 +1,23 @@
 
 body {
-    background-image: url("../media/images/darkforestparallax.jpeg");
-    background-attachment: fixed;
-    
+    background: rgb(8,7,7);
+    background: linear-gradient(90deg, rgba(8,7,7,1) 0%, rgba(10,6,6,1) 42%, rgba(208,56,56,1) 50%, rgba(38,4,4,1) 58%, rgba(0,0,0,1) 100%);
+}
+
+.card img {
+    filter: grayscale(70%);
 }
 
 /* media query for mobile */
 
-.card img {
-    filter: grayscale(100%);
-    transition: all 750ms ease-in-out .5s;
+@media screen and (min-width: 900px) {
+    .card img {
+        filter: grayscale(100%);
+        transition: all 750ms ease-in-out .5s;
+    }
+    
+    .card img:hover {
+        filter: grayscale(50%);
+    }
 }
 
-.card img:hover {
-    filter: grayscale(70%);
-}
-
-.card-NA {
-    filter: invert(100%) blur(3px);
-    transition: all 750ms ease-in-out 1s;
-}
-
-.card-NA:hover {
-    filter:invert(0) blur(0);
-}

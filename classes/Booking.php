@@ -4,7 +4,6 @@
     require_once "./functions.php";
 
     class Booking extends Database {
-    
         public function reserveProperty() {
             
                 $errorsBooking = [];

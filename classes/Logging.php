@@ -5,7 +5,7 @@
 
     class Logging extends Database {        
 
-        //Check if admin is trying to connect
+        //Log admin or client if login details are correct
         public function CheckLogin() {
             $sql = "SELECT * FROM `admin` WHERE admin_email = :admin_email";
             $stmt = $this->conn->prepare($sql);

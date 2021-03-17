@@ -2,7 +2,11 @@
     session_start();
     ob_start();
     $title = "Darkbnb dashboard";
-    // TODO : Check is admin is connected via session variables, redirect if not;
+    if (!isset($_SESSION['admin-connected']) && !isset($_SESSION['admin-email']) && !isset($_SESSION['admin_id'])) {
+        // TODO : proper redirection
+        header("Location: index.php");
+        exit();
+    } else {
     require_once "search_form.php";
     require_once "classes/LodgingManager.php";
     $dashboard = new LodgingManager();
@@ -275,6 +279,7 @@
 </table>
 
 <?php 
+    }
     $content = ob_get_clean();
     require "template.php";
 ?>

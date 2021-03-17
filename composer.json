@@ -1,0 +1,12 @@
+{
+    "name": "wolfe/school-project-5-lodging",
+    "authors": [
+        {
+            "name": "Maxime Lassiaz",
+            "email": "maxime.lassiaz@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.3"
+    }
+}

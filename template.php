@@ -9,29 +9,19 @@
     <title><?= $title ?? "Darkbnb" ;?></title>
 </head>
 <body>
-    <?php // TODO : change button wether admin/client is connected or not ?>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5 border-bottom">
-        <a class="navbar-brand" href="#">Darkbnb</a>
-        <a class="navbar-brand" href="#"><?= $_SESSION['admin-email'] ?? "" ;?></a>
+        <a class="navbar-brand" href="index.php">Darkbnb</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <?php // TODO : add name or email in navbar when connected ?>
             <ul class="navbar-nav mr-5 ml-auto">
                 <li class="nav-item mx-auto m-2">
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <?php 
-                    if ((isset($_SESSION['admin-connected']) && isset($_SESSION['admin-email'])) || (isset($_SESSION['client-connected']) && isset($_SESSION['client-email']))) {
-                ?>
-                <li class="nav-item mx-auto m-2">
-                    <a class="nav-link" href="booking.php">Booking</a>
-                </li>
-                <?php 
-                    }
-                    if (isset($_SESSION['admin-connected']) && isset($_SESSION['admin-email'])) {
+                    if (isset($_SESSION['admin-connected']) && isset($_SESSION['admin-email']) && isset($_SESSION['admin-id'])) {
                 ?>
                 <li class="nav-item mx-auto m-2">
                     <a class="nav-link" href="dashboard.php">Dashboard</a>
@@ -139,7 +129,9 @@
                     if (!empty($_SESSION)) {
                 ?>
                 <li class="nav-item mx-auto">
-                    <a class="btn btn-danger m-2" href="logout.php" role="button">Log out</a>
+                    <form method="POST" action="logout.php">
+                        <button type="submit" class="btn btn-danger m-2" name="logout-submit">Log out</button>
+                    </form>
                 </li>
                 <?php
                     }
@@ -147,8 +139,6 @@
             </ul>
         </div>
     </nav>
-
-    <div class="parallax-wrapper"></div>
 
     <?= $content ?>
 

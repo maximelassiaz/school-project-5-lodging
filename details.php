@@ -1,5 +1,6 @@
 <?php
-    if(!isset($_GET['id']) || (int)$_GET['id'] < 0 || !is_int((int)$_GET['id']) || !is_numeric($_GET['id'])) {
+    // TODO : rewrite with regex
+    if(!isset($_GET['id']) || (int)$_GET['id'] < 0 || !preg_match("/\d/", $_GET['id'])) {
         header("Location: index.php");
         exit();
     } else {  
@@ -7,7 +8,7 @@
     ob_start();
     require_once "classes/Lodging.php";
     $lodging = new Lodging();
-    $row = $lodging->getLodging($_GET['id']);
+    $row = $lodging->getLodging((int)$_GET['id']);
 ?>
 
     <div class="card bg-dark text-white m-5">
@@ -17,7 +18,7 @@
             </div>
             <div class="col-md-6">
                 <div class="card-body">
-                    <h4 class="card-title mb-5"><?= ucwords(htmlspecialchars($row['gite_name']))?></h4>
+                    <h4 class="card-title mb-5"><?= strtoupper(htmlspecialchars($row['gite_name']))?></h4>
                     <p class="card-text"><?= htmlspecialchars($row['gite_description']) ?></p>
                     <h6 class="card-title border-top border-white p-2 text-center">AVAILABILTY</h6>
                     <?php // TODO : calendar ?>
@@ -28,42 +29,54 @@
                         <?= strtoupper(htmlspecialchars($row['gite_country'])) ?>
                     </p>
                     <h6 class="card-title border-top border-white p-2 text-center">PROPERTY INFORMATIONS</h6>
-                    <p class="card-text">
-                        <strong>Property type :</strong>
-                        <?= ucfirst(htmlspecialchars($row['category_gite_name'])) ;?>
-                    </p>
-                    <p class="card-text">
-                        <strong>Price / night :</strong>
-                        <?= number_format(htmlspecialchars($row['gite_price']), 2, ",", " ") ;?> €
-                    </p>
-                    <p class="card-text">
-                        <strong>Guest(s) :</strong>
-                        <?= htmlspecialchars($row['gite_guest']) ;?>
-                    </p>
-                    <p class="card-text">
-                        <strong>Bed(s) :</strong>
-                        <?= htmlspecialchars($row['gite_bed']) ;?>
-                    </p>
-                    <p class="card-text">
-                        <strong>Bathroom(s) :</strong>
-                        <?= htmlspecialchars($row['gite_bathroom']) ;?>
-                    </p>
-                    <p class="card-text">
-                        <strong>WiFi :</strong>
-                        <?= isAvailable($row['gite_wifi']) ;?>
-                    </p>
-                    <p class="card-text">
-                        <strong>Garden :</strong>
-                        <?= isAvailable($row['category_gite_garden']) ;?>
-                    </p>
-                    <p class="card-text">
-                        <strong>Pool :</strong>
-                        <?= isAvailable($row['category_gite_pool']) ;?>
-                    </p>
-                    <p class="card-text">
-                        <strong>Kitchen :</strong>
-                        <?= isAvailable($row['category_gite_kitchen']) ;?>
-                    </p>
+                    <?php // TODO : separate info and value ?>
+                    <table class="table table-dark mt-2">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Property type</th>
+                                <td><?= ucwords(htmlspecialchars($row['category_gite_name']));?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Location</th>
+                                <td>
+                                <?= htmlspecialchars($row['gite_postal']) ?>
+                                <?= strtoupper(htmlspecialchars($row['gite_city'])) ?>
+                            </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Price / night</th>
+                                <td><?= number_format(htmlspecialchars($row['gite_price']), 2, ",", " ") ?> €</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Guest(s)</th>
+                                <td><?= htmlspecialchars($row['gite_guest']) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bed(s)</th>
+                                <td><?= htmlspecialchars($row['gite_bed']) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bathroom(s)</th>
+                                <td><?= htmlspecialchars($row['gite_bathroom']) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">WiFi</th>
+                                <td><?= isAvailable($row['gite_wifi']) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Garden</th>
+                                <td><?= isAvailable($row['category_gite_garden']) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pool</th>
+                                <td><?= isAvailable($row['category_gite_pool']) ?></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Kitchen</th>
+                                <td><?= isAvailable($row['category_gite_kitchen']) ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="card-footer text-center mt-auto w-100 border-top-0 bg-dark">
                     <?php 

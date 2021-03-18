@@ -11,12 +11,12 @@
         if ($booking->reserveProperty()) {
 
             $email = $_SESSION['client-email'];
-            $fname = $_SESSION['client-fname'];
-            $lname = $_SESSION['client-lname'];
+            $fname = ucfirst($_SESSION['client-fname']);
+            $lname = ucfirst($_SESSION['client-lname']);
 
             // send confirmation mail
             require "classes/Mailing.php";
-            $confirmationMail = new Mailing();
+            $confirmationMail = new Mailing($fname, $lname, $email);
         }             
     }
 ?>

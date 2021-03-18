@@ -16,6 +16,7 @@
         $booking = $_GET['booking'];
 ?>
         <div class="alert alert-<?= $booking === "failure" ? "danger" : "success" ?> alert-dismissible fade show mx-auto my-4 w-50" role="alert">
+            <?= $booking === "notavailable" ? "Sorry the lodging is not available for the date you set" : "" ?>
             <?= $booking === "emptyfields" ? "You must fill both date fields" : "" ?>
             <?= $booking === "success" ? "Congratulation, booking is successful, we sent you a email" : "" ?>
             <?= $booking === "failure" ? "An error occured, please try again or contact support" : "" ?>
@@ -116,15 +117,31 @@
                                     <form method="POST" action="reserve.php">
                                         <div class="form-group col-md-12">
                                             <label for="booking_date_arrival">Check in</label>
-                                            <input type="date" class="form-control" id="booking_date_arrival" name="booking_date_arrival" required>
+                                            <input type="date" class="form-control" id="booking_date_arrival" name="booking_date_arrival" value="<?= date("Y-m-d")?>" required>
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label for="booking_date_departure">Check out</label>
                                             <input type="date" class="form-control" id="booking_date_departure" name="booking_date_departure" required>
                                         </div>
                                         <input type="hidden" name="booking_gite_id" value="<?= htmlspecialchars($row['gite_id']) ;?>">
+                                        <input type="hidden" name="booking_gite_name" value="<?= htmlspecialchars($row['gite_name']) ;?>">
+                                        <input type="hidden" name="booking_gite_description" value="<?= htmlspecialchars($row['gite_description']) ;?>">
+                                        <input type="hidden" name="booking_gite_type" value="<?= htmlspecialchars($row['category_gite_name']) ;?>">
+                                        <input type="hidden" name="booking_gite_street" value="<?= htmlspecialchars($row['gite_street']) ;?>">
+                                        <input type="hidden" name="booking_gite_city" value="<?= htmlspecialchars($row['gite_city']) ;?>">
+                                        <input type="hidden" name="booking_gite_postal" value="<?= htmlspecialchars($row['gite_postal']) ;?>">
+                                        <input type="hidden" name="booking_gite_country" value="<?= htmlspecialchars($row['gite_country']) ;?>">
+                                        <input type="hidden" name="booking_gite_price" value="<?= htmlspecialchars($row['gite_price']) ;?>">
+                                        <input type="hidden" name="booking_gite_guest" value="<?= htmlspecialchars($row['gite_guest']) ;?>">
+                                        <input type="hidden" name="booking_gite_bed" value="<?= htmlspecialchars($row['gite_bed']) ;?>">
+                                        <input type="hidden" name="booking_gite_bathroom" value="<?= htmlspecialchars($row['gite_bathroom']) ;?>">
+                                        <input type="hidden" name="booking_gite_wifi" value="<?= htmlspecialchars($row['gite_wifi']) ;?>">
+                                        <input type="hidden" name="booking_gite_garden" value="<?= htmlspecialchars($row['category_gite_garden']) ;?>">
+                                        <input type="hidden" name="booking_gite_kitchen" value="<?= htmlspecialchars($row['category_gite_kitchen']) ;?>">
+                                        <input type="hidden" name="booking_gite_pool" value="<?= htmlspecialchars($row['category_gite_pool']) ;?>">
+
                                         <input type="hidden" name="booking_client_id" value="<?= htmlspecialchars($_SESSION['client-id']) ;?>">
-                                        <?php // TODO : add bed / guests info for mail / arrival hour / departure hour ?>
+                                        <input type="hidden" name="booking_gite_id" value="<?= htmlspecialchars($row['gite_id']) ;?>">                                          
                                         <?php
                                             if (isset($_SESSION['booking-error']) && count($_SESSION['booking-error']) > 0 ) {
                                                 $bookingErrors = $_SESSION['booking-error'];

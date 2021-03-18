@@ -5,7 +5,6 @@
         exit();
     } else {
         require_once "classes/LodgingManager.php";
-        // TODO change collation in PHPMyAdmin
         $addProperty = new LodgingManager();
         $addProperty->addLodging();
     }

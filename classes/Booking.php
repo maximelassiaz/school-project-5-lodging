@@ -15,6 +15,7 @@
                 $date_departure = sanitize_input($_POST['booking_date_departure']);
                 $client_id = (int)sanitize_input($_POST['booking_client_id']);
                 $gite_id = (int)sanitize_input($_POST['booking_gite_id']);
+                $date_today = date('Y-m-d');
 
                 if (empty($date_arrival) || empty($date_departure) || empty($client_id) || empty($gite_id)) {
                     header("Location: details.php?id=$gite_id&booking=emptyfields");
@@ -23,6 +24,10 @@
 
                     if($date_arrival >= $date_departure) {
                         $errorsBooking[] = "\"Date of arrival\" must be set before \"date of departure\"";
+                    }
+
+                    if($date_arrival <= $date_today) {
+                        $errorsBooking[] = "\"Date of arrival\" must be set after current day";
                     }
 
                     if ((!strtotime($date_arrival) && !empty($date_arrival)) || (!strtotime($date_departure) && !empty($date_departure))) {
@@ -50,20 +55,39 @@
                         header("Location: details.php?id=$gite_id");
                         exit();
                     } else {
-                        $sql = "INSERT INTO booking (id_booking_gite, id_booking_client, booking_date_arrival, booking_date_departure)
-                                VALUES (:id_booking_gite, :id_booking_client, :booking_date_arrival, :booking_date_departure)";
+
+                        $sql = "SELECT * FROM booking 
+                                WHERE id_booking_gite = :id_booking_gite
+                                AND booking_date_arrival <= :booking_date_departure 
+                                AND booking_date_departure >= :booking_date_arrival";
                         $stmt = $this->conn->prepare($sql);
-                        if ($parameters) {
-                            foreach ($parameters as $p) {
-                                $stmt->bindValue($p[0], $p[1], $p[2]);
-                            }
-                        }
-                        if ($stmt->execute()) {
-                            return true;
-                        } else {
-                            header("Location: details.php?id=$gite_id&booking=failure");
+                        $stmt->bindValue(":booking_date_departure", $date_departure, PDO::PARAM_STR);
+                        $stmt->bindValue(":booking_date_arrival", $date_arrival, PDO::PARAM_STR);
+                        $stmt->bindValue(":id_booking_gite", $gite_id, PDO::PARAM_INT);
+                        
+                        $stmt->execute();
+
+                        $count = $stmt->rowCount();
+
+                        if ($count > 0) {
+                            header("Location: details.php?id=$gite_id&booking=notavailable");
                             exit();
-                        }
+                        } else {
+                            $sql = "INSERT INTO booking (id_booking_gite, id_booking_client, booking_date_arrival, booking_date_departure)
+                            VALUES (:id_booking_gite, :id_booking_client, :booking_date_arrival, :booking_date_departure)";
+                            $stmt = $this->conn->prepare($sql);
+                            if ($parameters) {
+                                foreach ($parameters as $p) {
+                                    $stmt->bindValue($p[0], $p[1], $p[2]);
+                                }
+                            }
+                            if ($stmt->execute()) {
+                                return true;
+                            } else {
+                                header("Location: details.php?id=$gite_id&booking=failure");
+                                exit();
+                            }
+                        }                        
                     }
                 }
             }
